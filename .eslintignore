@@ -1,0 +1,5 @@
+*.config.js
+*.config.ts
+*.test.jsx
+*.test.tsx
+dist
