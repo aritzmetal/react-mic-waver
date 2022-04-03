@@ -1,54 +1,59 @@
-import React, { createContext, useEffect, useState, useContext } from "react"
-import { useInputAudio } from "./InputAudio"
+import React, { createContext, useEffect, useState, useContext } from "react";
+import { useInputAudio } from "./InputAudio";
 
 interface AudioAnalyserContextValue {
-    analyser: AnalyserNode | undefined
+  analyser: AnalyserNode | undefined;
 }
 
 const AudioAnalyserContext = createContext<AudioAnalyserContextValue>({
-    analyser: undefined,
-})
+  analyser: undefined,
+});
 
-export const useAudioAnalyser = (): AudioAnalyserContextValue => useContext(AudioAnalyserContext)
+export const useAudioAnalyser = (): AudioAnalyserContextValue =>
+  useContext(AudioAnalyserContext);
 
 export interface Props {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export const AudioAnalyserProvider = ({ children }: Props): JSX.Element => {
-    const [analyser, setAnalyser] = useState<AnalyserNode>()
-    const { source } = useInputAudio()
+  const [analyser, setAnalyser] = useState<AnalyserNode>();
+  const { source } = useInputAudio();
 
-    useEffect(() => {
-        if (source) {
-            const analyserNode = source.context.createAnalyser()
-            analyserNode.smoothingTimeConstant = 1
-            source.connect(analyserNode)
-            setAnalyser(analyserNode)
-        }
-    }, [source])
+  useEffect(() => {
+    if (source) {
+      const analyserNode = source.context.createAnalyser();
+      analyserNode.smoothingTimeConstant = 1;
+      source.connect(analyserNode);
+      setAnalyser(analyserNode);
+    }
+  }, [source]);
 
-    useEffect(() => {
-        if (analyser && source) {
-            source.connect(analyser)
-        }
+  useEffect(() => {
+    if (analyser && source) {
+      source.connect(analyser);
+    }
 
-        if (!source) {
-            if (analyser) {
-                analyser.disconnect()
-                setAnalyser(undefined)
-            }
-        }
+    if (!source) {
+      if (analyser) {
+        analyser.disconnect();
+        setAnalyser(undefined);
+      }
+    }
 
-        return () => {
-            if (analyser) {
-                analyser.disconnect()
-                setAnalyser(undefined)
-            }
-        }
-    }, [analyser, source])
+    return () => {
+      if (analyser) {
+        analyser.disconnect();
+        setAnalyser(undefined);
+      }
+    };
+  }, [analyser, source]);
 
-    return <AudioAnalyserContext.Provider value={{ analyser }}>{children}</AudioAnalyserContext.Provider>
-}
+  return (
+    <AudioAnalyserContext.Provider value={{ analyser }}>
+      {children}
+    </AudioAnalyserContext.Provider>
+  );
+};
 
-export default AudioAnalyserProvider
+export default AudioAnalyserProvider;
