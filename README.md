@@ -44,7 +44,7 @@ import {
 
 ```tsx
 ...
-import AudioVisualiser, { useMediaStream } from "react-mic-wave";
+import AudioVisualiser, { useMediaStream } from "react-mic-waver";
 ...
 
 export const Component = () => {
