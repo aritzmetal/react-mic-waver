@@ -1,22 +1,7 @@
-import React, { createContext, useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useInputAudio } from "./InputAudio";
 
-interface AudioAnalyserContextValue {
-  analyser: AnalyserNode | undefined;
-}
-
-const AudioAnalyserContext = createContext<AudioAnalyserContextValue>({
-  analyser: undefined,
-});
-
-export const useAudioAnalyser = (): AudioAnalyserContextValue =>
-  useContext(AudioAnalyserContext);
-
-export interface Props {
-  children: React.ReactNode;
-}
-
-export const AudioAnalyserProvider = ({ children }: Props): JSX.Element => {
+export const useAudioAnalyser = () => {
   const [analyser, setAnalyser] = useState<AnalyserNode>();
   const { source } = useInputAudio();
 
@@ -49,11 +34,7 @@ export const AudioAnalyserProvider = ({ children }: Props): JSX.Element => {
     };
   }, [analyser, source]);
 
-  return (
-    <AudioAnalyserContext.Provider value={{ analyser }}>
-      {children}
-    </AudioAnalyserContext.Provider>
-  );
+  return analyser;
 };
 
-export default AudioAnalyserProvider;
+export default useAudioAnalyser;

@@ -15,7 +15,7 @@ const AudioVisualiser = ({
   lineWidth = 2,
 }: Props): JSX.Element => {
   const canvasRef = createRef<HTMLCanvasElement>();
-  const { analyser } = useAudioAnalyser();
+  const analyser = useAudioAnalyser();
 
   useEffect(() => {
     if (!analyser) {
