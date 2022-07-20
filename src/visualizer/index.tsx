@@ -1,21 +1,25 @@
 import React, { createRef, useEffect } from "react";
 import { useAudioAnalyser } from "../utils/AudioAnalyser";
 
-export interface Props {
-  color?: "black" | "white";
-  width?: number | string;
-  height?: number | string;
+export interface Props<T = string> {
+  stream: MediaStream | undefined;
+  color?: string;
+  width?: T;
+  height?: T;
   lineWidth?: number;
+  onRender?: () => void;
 }
 
 const AudioVisualiser = ({
+  stream,
   width = "auto",
   height = "auto",
-  color = "white",
+  color = "black",
   lineWidth = 2,
+  onRender,
 }: Props): JSX.Element => {
   const canvasRef = createRef<HTMLCanvasElement>();
-  const analyser = useAudioAnalyser();
+  const analyser = useAudioAnalyser(stream);
 
   useEffect(() => {
     if (!analyser) {
@@ -38,7 +42,7 @@ const AudioVisualiser = ({
 
         if (context) {
           context.lineWidth = lineWidth;
-          context.strokeStyle = color === "white" ? "#fff" : "#000";
+          context.strokeStyle = color;
           context.clearRect(0, 0, width, height);
 
           context.beginPath();
@@ -54,6 +58,8 @@ const AudioVisualiser = ({
       }
     };
     draw();
+
+    onRender && onRender();
 
     return () => {
       cancelAnimationFrame(raf);

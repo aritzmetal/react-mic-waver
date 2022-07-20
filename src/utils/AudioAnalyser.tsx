@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useInputAudio } from "./InputAudio";
 
-export const useAudioAnalyser = () => {
+export const useAudioAnalyser = (stream: MediaStream | undefined) => {
   const [analyser, setAnalyser] = useState<AnalyserNode>();
-  const { source } = useInputAudio();
+  const { source } = useInputAudio(stream);
 
   useEffect(() => {
     if (source) {

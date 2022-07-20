@@ -1,23 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useMediaStream } from "./MediaStream";
+import { useEffect, useState, useCallback } from "react";
 
-export const useInputAudio = () => {
-  const [context, setContext] = useState<AudioContext>();
-  const [source, setSource] = useState<MediaStreamAudioSourceNode>();
-  const { stream } = useMediaStream();
+export const useInputAudio = (stream: MediaStream | undefined) => {
+  const [context, setContext] = useState<AudioContext | undefined>();
+  const [source, setSource] = useState<
+    MediaStreamAudioSourceNode | undefined
+  >();
 
   const stop = useCallback(async () => {
-    try {
-      if (context) {
-        await context.close();
-        setContext(undefined);
-      }
-      if (source) {
-        source.disconnect();
-        setSource(undefined);
-      }
-    } catch (error: any) {
-      console.error(error.name, error.message);
+    if (context && context.state !== "closed") {
+      await context.close();
+      setContext(undefined);
+    }
+
+    if (source) {
+      source.disconnect();
+      setSource(undefined);
     }
   }, [context, source]);
 
@@ -33,10 +30,6 @@ export const useInputAudio = () => {
     if (!stream) {
       stop();
     }
-
-    return () => {
-      stop();
-    };
   }, [stream, stop]);
 
   return { audioCtx: context, source };

@@ -1,4 +1,9 @@
 {
   "version": "v1",
-  "packages": {}
+  "packages": {
+    "react-mic-waver": {
+      "signature": "9a39fb8f65ac2766c0ddbe3b9c0780eb",
+      "file": true
+    }
+  }
 }

@@ -1,7 +1,7 @@
 ## About
 
 It detects the user voice and renders a oscillating wave.
-It provides the wave component and also the contexts which picks the data from.
+It provides the wave component and also a simple MediaStream context for simple usage.
 
 ### Instalation
 
@@ -19,23 +19,18 @@ It provides the wave component and also the contexts which picks the data from.
 
 ### Example
 
+The `MediaStreamProvider` and also the `useMediaStream` hook come with the `AudioVisualiser` default export as a little plus if you don't need a complex custom implementation of the stream context. The stream generated is passed as a parameter to the `AudioVisualiser` component to generate the analyzer over it and render the wave.
 
 #### Wrapper Element 
 ```tsx
 ...
 import { 
   MediaStreamProvider, 
-  InputAudioProvider, 
-  AudioAnalyserProvider 
-  } from "react-mic-wave"
+  } from "react-mic-waver"
 ...
 
   <MediaStreamProvider video={false} audio={true}>
-    <InputAudioProvider>
-      <AudioAnalyserProvider>
         <Component />
-      </AudioAnalyserProvider>
-    </InputAudioProvider>
   </MediaStreamProvider>
 ...
 ```
@@ -50,17 +45,19 @@ import AudioVisualiser, { useMediaStream } from "react-mic-waver";
 export const Component = () => {
 
   ...
-  const { start } = useMediaStream();
+  const { stream, start, stop } = useMediaStream();
 
-  useEffect(() => {
-    start();
-  }, [])
+  const toggleMic = () => stream ? stop() : start()
+
   ...
 
   return (
     ...
-      <div className="container">
-        <AudioVisualiser/>
+      <div style={{width: "300px", height: "200px", background: "#fff"}}>
+       <button className="App-btn" onClick={toggleMic}>
+          {stream ? 'Close Microphone' : "Open Microphone"}
+        </button>
+        <AudioVisualiser stream={stream} onRender={() => console.log("Render!")}/>
       </div>
     ...
   );
@@ -70,9 +67,11 @@ export const Component = () => {
 
 ### Props
 
-|   Props   |     Type      | Default |        Description         |
-|:---------:|:-------------:|:-------:|:--------------------------:|
-|   color   |    string     | "white" | color of the rendered wave |
-|   width   | number/string | "auto"  |  width of the wave canvas  |
-|  height   | number/string | "auto"  | height of the wave canvas  |
-| lineWidth |    number     |    2    | width of the rendered wave |
+|   Props   |     Type      | Default |                Description                |
+|:---------:|:-------------:|:-------:|:-----------------------------------------:|
+|  stream   |  MediaStream  |    -    |             stream to analyze             |
+|   color   |    string     | "black" |        color of the rendered wave         |
+|   width   | number/string | "auto"  |         width of the wave canvas          |
+|  height   | number/string | "auto"  |         height of the wave canvas         |
+| lineWidth |    number     |    2    |        width of the rendered wave         |
+| onRender  |  () => void   |    -    | callback that fires when wave is rendered |
