@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Masonry Should render: basic 1`] = `
+<body>
+  <div>
+    <div
+      class="App"
+    />
+  </div>
+</body>
+`;

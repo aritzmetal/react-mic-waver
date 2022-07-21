@@ -19,7 +19,7 @@ It provides the wave component and also a simple MediaStream context for simple 
 
 ### Example
 
-The `MediaStreamProvider` and also the `useMediaStream` hook come with the `AudioVisualiser` default export as a little plus if you don't need a complex custom implementation of the stream context. The stream generated is passed as a parameter to the `AudioVisualiser` component to generate the analyzer over it and render the wave.
+The `MediaStreamProvider` and also the `useMediaStream` hook come with the `AudioVisualiser` default export as a little controller that works out of the box if you don't need a complex custom implementation of the stream context. The stream generated is passed as a parameter to the `AudioVisualiser` component to generate the analyzer over it and render the wave.
 
 #### Wrapper Element 
 ```tsx
@@ -57,7 +57,7 @@ export const Component = () => {
        <button className="App-btn" onClick={toggleMic}>
           {stream ? 'Close Microphone' : "Open Microphone"}
         </button>
-        <AudioVisualiser stream={stream} onRender={() => console.log("Render!")}/>
+        <AudioVisualiser stream={stream} onRender={() => console.log("Render!")} style={{background: "red"}}/>
       </div>
     ...
   );
@@ -67,11 +67,12 @@ export const Component = () => {
 
 ### Props
 
-|   Props   |     Type      | Default |                Description                |
-|:---------:|:-------------:|:-------:|:-----------------------------------------:|
-|  stream   |  MediaStream  |    -    |             stream to analyze             |
-|   color   |    string     | "black" |        color of the rendered wave         |
-|   width   | number/string | "auto"  |         width of the wave canvas          |
-|  height   | number/string | "auto"  |         height of the wave canvas         |
-| lineWidth |    number     |    2    |        width of the rendered wave         |
-| onRender  |  () => void   |    -    | callback that fires when wave is rendered |
+|   Props   |     Type      | Default |                  Description                   |
+|:---------:|:-------------:|:-------:|:----------------------------------------------:|
+|  stream   |  MediaStream  |    -    |               stream to analyze                |
+|   color   |    string     | "black" |           color of the rendered wave           |
+|   width   | number/string | "auto"  |            width of the wave canvas            |
+|  height   | number/string | "auto"  |           height of the wave canvas            |
+| lineWidth |    number     |    2    |           width of the rendered wave           |
+| onRender  |  () => void   |    -    |   callback that fires when wave is rendered    |
+|   style   | CSSProperties |    -    | extra styles applied to the canvas of the wave |

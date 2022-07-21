@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from "react";
+import React, { createRef, CSSProperties, useEffect } from "react";
 import { useAudioAnalyser } from "../utils/AudioAnalyser";
 
 export interface Props<T = string> {
@@ -8,6 +8,8 @@ export interface Props<T = string> {
   height?: T;
   lineWidth?: number;
   onRender?: () => void;
+  style?: CSSProperties;
+  testId?: string;
 }
 
 const AudioVisualiser = ({
@@ -17,6 +19,7 @@ const AudioVisualiser = ({
   color = "black",
   lineWidth = 2,
   onRender,
+  style,
 }: Props): JSX.Element => {
   const canvasRef = createRef<HTMLCanvasElement>();
   const analyser = useAudioAnalyser(stream);
@@ -69,7 +72,7 @@ const AudioVisualiser = ({
   return (
     <React.Fragment>
       {analyser ? (
-        <canvas width={width} height={height} ref={canvasRef} />
+        <canvas width={width} height={height} ref={canvasRef} style={style} />
       ) : null}
     </React.Fragment>
   );
